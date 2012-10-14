@@ -1,10 +1,4 @@
-<% if order.apply_credit and order.store_credit_amount > 0 %>
-    <li class="pull-left">Your Bonus Credit</li>
-    <li class="pull-right"><%= number_to_currency(order.store_credit_amount) %></li>
-    <br/>
-    <%= form.hidden_field :apply_credit %>
-    <%= form.hidden_field :store_credit_amount %>
-<% end %>
+
 
  <%# This block is from default store credits. Commented now but can be used in the future  %>
 <% if false %>

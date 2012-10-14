@@ -1,18 +1,30 @@
 module Spree
   Order.class_eval do
-    attr_accessible :store_credit_amount, :remove_store_credits
-    attr_accessor :store_credit_amount, :remove_store_credits
+    attr_accessible :store_credit_amount, :apply_credit
+    attr_accessor :store_credit_amount, :apply_credit
 
     # the check for user? below is to ensure we don't break the
     # admin app when creating a new order from the admin console
     # In that case, we create an order before assigning a user
-    before_save :process_store_credit, :if => "self.user.present? && @store_credit_amount"
+    #  Apply only when user selects the checkbox
+
+    before_save :process_store_credit, :if => "self.user.present? and  !@apply_credit.nil?"
+    after_save :set_apply_credit
     after_save :ensure_sufficient_credit, :if => "self.user.present? && !self.completed?"
 
     validates_with StoreCreditMinimumValidator
 
+    def set_apply_credit
+      @apply_credit ||= (self.store_credit_amount>0)?true:false
+    end
+
     def store_credit_amount
       adjustments.store_credits.sum(:amount).abs
+    end
+
+    # Credits are applicable only to store
+    def store_total
+      line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum
     end
 
 
@@ -32,10 +44,11 @@ module Spree
     # credit or update store credit adjustment to correct value if amount specified
     #
     def process_store_credit
+      @store_credit_amount ||= self.user.store_credits_total if @apply_credit
       @store_credit_amount = BigDecimal.new(@store_credit_amount.to_s).round(2)
 
       # store credit can't be greater than order total (not including existing credit), or the user's available credit
-      @store_credit_amount = [@store_credit_amount, user.store_credits_total, (total + store_credit_amount.abs)].min
+      @store_credit_amount = [@store_credit_amount, user.store_credits_total, (store_total + store_credit_amount.abs)].min
 
       if @store_credit_amount <= 0
         adjustments.store_credits.destroy_all
@@ -52,10 +65,6 @@ module Spree
       update_totals
       payment.amount = total if payment
     end
-
-    # consume users store credit once the order has completed.
-    fsm = self.state_machines[:state]
-    fsm.after_transition :to => :complete, :do => :consume_users_credit
 
     def consume_users_credit
       return unless completed?

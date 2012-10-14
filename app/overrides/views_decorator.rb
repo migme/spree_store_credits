@@ -12,19 +12,21 @@ Deface::Override.new(
   :text => "&nbsp;<%= link_to_with_icon('add', t('add_store_credit'), new_admin_user_store_credit_url(user)) %>",
   :disabled => false)
 
-Deface::Override.new(
-  :virtual_path => "spree/checkout/_payment",
-  :name => "store_credits_checkout_payment_step",
-  :insert_after => "[data-hook='checkout_payment_step']",
-  :partial => "spree/checkout/store_credits",
-  :disabled => false)
 
 Deface::Override.new(
-  :virtual_path => "spree/users/show",
-  :name => "store_credits_account_my_orders",
-  :insert_after => "[data-hook='account_my_orders']",
-  :partial => "spree/users/store_credits",
-  :disabled => false)
+    :virtual_path => "spree/orders/edit",
+    :name => "store_credits_cart_step",
+    :insert_top => "[data-hook='cart_total']",
+    :partial => "spree/orders/cart_credits",
+    :disabled => false)
+
+
+Deface::Override.new(
+    :virtual_path => "spree/shared/order/_cart_total_confirm",
+    :name => "store_credits_confirm_step",
+    :insert_before => "[data-hook='order_confirm_total']",
+    :partial => "spree/checkout/confirm_credits",
+    :disabled => false)
 
 Deface::Override.new(:virtual_path => "spree/admin/general_settings/show",
                      :name => "admin_general_settings_show_for_sc",
