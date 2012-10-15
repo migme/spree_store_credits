@@ -6,3 +6,7 @@
   <%= f.label :reason, t("reason")%><br />
   <%= f.text_field :reason %>
 <% end %>
+<%= f.field_container :valid_to do %>
+    <%= f.label :valid_to, t("valid_to")%><br />
+    <%= f.datetime_select :valid_to %>
+<% end %>
