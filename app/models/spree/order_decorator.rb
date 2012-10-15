@@ -9,14 +9,10 @@ module Spree
     #  Apply only when user selects the checkbox
 
     before_save :process_store_credit, :if => "self.user.present? and  !@apply_credit.nil?"
-    after_save :set_apply_credit
     after_save :ensure_sufficient_credit, :if => "self.user.present? && !self.completed?"
+    after_save :ensure_credits_used_for_shop, :if => "self.user.present? && !self.completed?"
 
     validates_with StoreCreditMinimumValidator
-
-    def set_apply_credit
-      @apply_credit ||= (self.store_credit_amount>0)?true:false
-    end
 
     def store_credit_amount
       adjustments.store_credits.sum(:amount).abs
@@ -93,6 +89,14 @@ module Spree
         # user's credit does not cover all adjustments.
         adjustments.store_credits.destroy_all
 
+        update!
+      end
+    end
+
+    def ensure_credits_used_for_shop
+
+      if store_credit_amount > store_total
+        adjustments.store_credits.destroy_all
         update!
       end
     end

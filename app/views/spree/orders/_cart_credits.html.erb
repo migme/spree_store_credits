@@ -1,15 +1,16 @@
 <!--credits!-->
-<div class="pull-left shop-credits">
-  <% if current_user.credit > 0 %>
+
+  <% if @order.store_total<=0 %>
+      <span class="txt-12">Looks like you have no products from Shop!<br>  Visit our <%= link_to 'Shop', root_url(subdomain: 'shop'), :class => "dark-link" %> to add new items.</span>
+  <% elsif current_user.credit > 0 %>
       <img src="/assets/credits_large.png" alt="" class="pull-left" />
       <span class="pull-left creds">Credits Available<br><span class="txt-24 txt-green"><%= number_to_currency(current_user.store_credits_total)  %></span> </span>
       <br class="clear" />
       <label class="checkbox inline">
-        <%= order_form.check_box :apply_credit ,'data-credits' => true,'data-uri' => credits_orders_url %>
-        <%= order_form.hidden_field :store_credit_amount,:value => current_user.store_credits_total %>
+        <%= check_box_tag :apply_credit ,@order.store_credit_amount>0, @order.store_credit_amount>0,'data-credits' => true,'data-uri' => credits_orders_url %>
         <span class="txt-12">Apply my Shop Credits to receive discount on Shop items.</span>
       </label> <br />
   <% else  %>
-      <span class="txt-12">Looks like you have no credits! Click <a href="#" class="dark-link">here</a> to visit our Shop.</span>
+      <span class="txt-12">Looks like you have no credits!<br> <%= link_to 'Refer friends', invite_friends_url, :class => "dark-link" %> to get bonus credits.</span>
   <% end %>
-</div>
+

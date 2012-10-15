@@ -16,7 +16,7 @@ Deface::Override.new(
 Deface::Override.new(
     :virtual_path => "spree/orders/edit",
     :name => "store_credits_cart_step",
-    :insert_top => "[data-hook='cart_total']",
+    :insert_top => "div#shop-credits",
     :partial => "spree/orders/cart_credits",
     :disabled => false)
 
