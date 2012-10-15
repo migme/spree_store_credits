@@ -36,24 +36,25 @@ module Spree
     def set_default_valid_to
       self.valid_to ||= DEFAULT_VALID_PERIOD
     end
-
-    def self.expire
-      self.expired.each do  |c|
-        begin
-          c.expire_credits!
-        rescue
-          Rails.logger.info "Cannot expire credits -  #{c.id}"
+    class << self
+      def expire
+        self.expired.each do  |c|
+          begin
+            c.expire_credits!
+          rescue
+            Rails.logger.info "Cannot expire credits -  #{c.id}"
+          end
         end
       end
-    end
 
-    def add_credit(user, amount, reason,valid_to = DEFAULT_VALID_PERIOD)
-      credit = new()
-      credit.user = user
-      credit.amount = amount
-      credit.reason = reason
-      credit.valid_to = valid_to
-      credit.save
+      def add_credit(user, amount, reason,valid_to = DEFAULT_VALID_PERIOD)
+        credit = new()
+        credit.user = user
+        credit.amount = amount
+        credit.reason = reason
+        credit.valid_to = valid_to
+        credit.save
+      end
     end
   end
 end
