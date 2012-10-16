@@ -51,6 +51,7 @@ module Spree
         credit = new()
         credit.user = user
         credit.amount = amount
+        credit.remaining_amount = amount
         credit.reason = reason
         credit.valid_to = valid_to
         credit.save
