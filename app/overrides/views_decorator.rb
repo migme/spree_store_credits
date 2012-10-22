@@ -1,3 +1,5 @@
+#move to promotions
+=begin
 Deface::Override.new(
   :virtual_path => "spree/admin/configurations/index",
   :name => "store_credits_admin_configurations_menu",
@@ -11,7 +13,16 @@ Deface::Override.new(
   :insert_bottom => "[data-hook='admin_users_index_row_actions']",
   :text => "&nbsp;<%= link_to_with_icon('add', t('add_store_credit'), new_admin_user_store_credit_url(user)) %>",
   :disabled => false)
+=end
 
+Deface::Override.new(
+    :virtual_path => "spree/admin/users/_user_tabs",
+    :name => "store_credits_admin_users_tabs_actions",
+    :insert_bottom => "[data-hook='admin_product_tabs']",
+    :text => "<li<%== ' class=\"active\"' if @current == 'Store Credits' %>>
+      <%= link_to t(:store_credits), admin_user_store_credits_path(@user) %>
+    </li>",
+    :disabled => false)
 
 Deface::Override.new(
     :virtual_path => "spree/orders/edit",

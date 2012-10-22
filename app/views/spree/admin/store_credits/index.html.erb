@@ -1,6 +1,8 @@
-<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<%#= render :partial => 'spree/admin/shared/configuration_menu' %>
+<%= render :partial => 'spree/admin/shared/promotions_group_sub_menu' if @user.nil?%>
 
 <h1><%= t("listing_store_credits") %></h1>
+<div align="right"><%= link_to t("admin.user.give_store_credit"), new_admin_user_store_credit_path(@user) unless @user.nil?%></div>
 <table class="index">
   <thead>
     <tr>
@@ -27,7 +29,7 @@
         <td class="actions">
           <% if store_credit.remaining_amount > 0 %>
             <% if store_credit.amount == store_credit.remaining_amount %>
-              <%= link_to_edit store_credit %> &nbsp;
+              <%= link_to_with_icon('edit', t(:edit), edit_admin_user_store_credit_path(store_credit.user.id,store_credit.id)) %> &nbsp;
             <% else %>
               <%= t(:was_partially_used) %>
             <% end %>
@@ -44,3 +46,6 @@
 </table>
 
 <%= paginate @store_credits %>
+
+<%= render :partial => 'spree/admin/users/user_tabs', :locals => { :user => @user} unless @user.nil? %>
+

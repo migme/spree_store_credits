@@ -1,10 +1,14 @@
-<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<%= render :partial => 'spree/admin/shared/promotions_group_sub_menu' if params[:user_id].nil?%>
+
+<%#= render :partial => 'spree/admin/shared/configuration_menu' %>
 
 <h1><%=t("editing_store_credit")%></h1>
 
 <%= render 'spree/shared/error_messages', :target => @store_credit %>
 
-<%= form_for(:store_credit, :url => object_url, :html => { :method => :put }) do |f| %>
+<%= form_for(:store_credit, :url => (@user.nil? or @store_credit.nil?) ? object_url : admin_user_store_credit_path(@store_credit.user.id,@store_credit.id), :html => { :method => :put }) do |f| %>
   <%= render :partial => "form", :locals => { :f => f } %>
   <%= render :partial => "spree/admin/shared/edit_resource_links" %>
 <% end %>
+
+<%= render :partial => 'spree/admin/users/user_tabs', :locals => { :user => @user} unless params[:user_id].nil? %>
