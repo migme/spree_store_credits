@@ -46,6 +46,8 @@ module Spree
       # store credit can't be greater than order total (not including existing credit), or the user's available credit
       @store_credit_amount = [@store_credit_amount, user.store_credits_total, (store_total + store_credit_amount.abs)].min
 
+      # destroy all shop promotions if not available
+      self.adjustments.promotion.destroy_all
       if @store_credit_amount <= 0
         adjustments.store_credits.destroy_all
       else
