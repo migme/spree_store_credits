@@ -48,6 +48,7 @@ module Spree
 
       # destroy all shop promotions if not available
       self.adjustments.promotion.destroy_all
+      self.update_column(:promo_code,nil)
       if @store_credit_amount <= 0
         adjustments.store_credits.destroy_all
       else
