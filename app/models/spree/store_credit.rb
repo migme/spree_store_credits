@@ -22,6 +22,11 @@ module Spree
       event :expire do
         transition :from => :valid, :to => :expired, :if => lambda {|cp| cp.valid_to < Time.zone.now.to_date}
       end
+      after_transition :to => :expired, :do => :update_after_expiration
+    end
+
+    def update_after_expiration
+      self.user.update_credit
     end
 
     def set_values
