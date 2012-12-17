@@ -6,13 +6,13 @@
 <table class="index">
   <thead>
     <tr>
-      <th><%= "User" %></th>
-      <th><%= t("amount") %></th>
-      <th><%= t("remaining_amount") %></th>
-      <th><%= t("valid_to") %></th>
-      <th><%= t("created") %></th>
-      <th><%= t("updated") %></th>
-      <th><%= t("reason") %></th>
+      <th><%= sort_link @q, :user_email, "User" %></th>
+      <th><%= sort_link @q, :amount, t("amount") %></th>
+      <th><%= sort_link @q, :remaining_amount, t("remaining_amount") %></th>
+      <th><%= sort_link @q, :valid_to, t("valid_to") %></th>
+      <th><%= sort_link @q, :created_at, t("created") %></th>
+      <th><%= sort_link @q, :updated_at, t("updated") %></th>
+      <th><%= sort_link @q, :reason, t("reason") %></th>
       <th></th>
     </tr>
   </thead>

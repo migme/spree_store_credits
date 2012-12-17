@@ -21,9 +21,11 @@ module Spree
 
     def collection
       if params[:user_id].nil?
-        super.page(params[:page])
+        @q = super.search(params[:q])
+        @q.result.page(params[:page])
       else #for store credits in admin user page
-        super.where(:user_id => params[:user_id].to_i).page(params[:page])
+        @q = super.where(:user_id => params[:user_id].to_i).search(params[:q])
+        @q.result.page(params[:page])
       end
     end
 
