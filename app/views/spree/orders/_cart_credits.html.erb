@@ -3,7 +3,7 @@
   <% if @order.store_total<=0 %>
       <span class="txt-12">Looks like you have no products from Shop!<br>  Visit our <%= link_to 'Shop', root_url(subdomain: 'shop'), :class => "dark-link" %> to add new items.</span>
   <% elsif current_user.credit > 0 %>
-      <img src="/assets/credits_large.png" alt="" class="pull-left" />
+      <img src="<%= s3_url('spree_sold_theme/credits_large.png') %>" alt="" class="pull-left" />
       <span class="pull-left creds">Credits Available<br><span class="txt-24 txt-green"><%= number_to_currency(current_user.store_credits_total)  %></span> </span>
       <br class="clear" />
       <label class="checkbox inline">
