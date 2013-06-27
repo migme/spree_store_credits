@@ -60,6 +60,7 @@ module Spree
         credit.reason = reason
         credit.valid_to = valid_to
         credit.save
+        credit
       end
     end
   end
