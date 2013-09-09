@@ -27,7 +27,7 @@ module Spree
     # override core process payments to force payment present
     # in case store credits were destroyed by ensure_sufficient_credit
     def process_payments!
-      if total > 0 && payment.nil?
+      if self.payment_required? && payment.nil?
         false
       else
         ret = payments.each(&:process!)
