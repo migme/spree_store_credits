@@ -20,7 +20,8 @@ module Spree
 
     # Credits are applicable only to store
     def store_total
-      line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum
+      # line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum
+      ((line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum * 30).to_d/100).round(2)
     end
 
 
