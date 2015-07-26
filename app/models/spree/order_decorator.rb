@@ -20,8 +20,8 @@ module Spree
 
     # Credits are applicable only to store
     def store_total
-      # line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum
-      ((line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum * 30).to_d/100).round(2)
+      line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum
+      # ((line_items.where("buyable_type ='Spree::Variant'").map(&:amount).sum * 30).to_d/100).round(2)
     end
 
 
@@ -35,6 +35,9 @@ module Spree
       end
     end
 
+    def thirty_percent_store_total
+      ((store_total * 30).to_d / 100).round(2)
+    end
 
     private
 
@@ -45,7 +48,8 @@ module Spree
       @store_credit_amount = BigDecimal.new(@store_credit_amount.to_s).round(2)
 
       # store credit can't be greater than order total (not including existing credit), or the user's available credit
-      @store_credit_amount = [@store_credit_amount, user.store_credits_total, (store_total + store_credit_amount.abs)].min
+
+      @store_credit_amount = [@store_credit_amount, user.store_credits_total, (thirty_percent_store_total + store_credit_amount.abs)].min
 
       # destroy all shop promotions if not available
       self.adjustments.promotion.destroy_all
@@ -98,8 +102,7 @@ module Spree
     end
 
     def ensure_credits_used_for_shop
-
-      if store_credit_amount > store_total
+      if store_credit_amount > thirty_percent_store_total
         adjustments.store_credits.destroy_all
         update!
       end
