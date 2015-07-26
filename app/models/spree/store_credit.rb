@@ -30,7 +30,7 @@ module Spree
     end
 
     def set_values
-      remaining_amount ||= amount
+      remaining_amount = amount
       valid_to ||= DEFAULT_VALID_PERIOD
     end
 
