@@ -1,7 +1,7 @@
 //= require store/spree_core
 
 $(document).ready(function () {
-    $("input#apply_credit").live('click',function(){
+    $("input#apply_credit").on('click',function(){
         requestUri = $(this).data('uri')
         value = $(this).is(':checked')
         $.ajax({
