@@ -1,7 +1,7 @@
 module Spree
   class StoreCredit < ActiveRecord::Base
 
-    DEFAULT_VALID_PERIOD = 30.days.from_now
+    DEFAULT_VALID_PERIOD = 7.days.from_now
     attr_accessible :user_id, :amount, :reason, :remaining_amount, :valid_to
 
     validates :amount, :presence => true, :numericality => true
